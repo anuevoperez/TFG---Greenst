@@ -1,0 +1,1 @@
+export const BACKOFFICE_API_URL="http://localhost:3000/backoffice";

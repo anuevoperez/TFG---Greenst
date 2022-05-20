@@ -1,0 +1,1 @@
+export const WEBSITE_API_URL="http://localhost:3001/website";
