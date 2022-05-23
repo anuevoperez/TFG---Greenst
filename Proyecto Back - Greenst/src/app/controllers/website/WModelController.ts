@@ -23,7 +23,7 @@ export default class WModelController implements ExpressController {
   get router() {
     this._router.get(
       "/",
-    /*   this._securityMiddleware.authenticateToken.bind(this._securityMiddleware),
+      /*   this._securityMiddleware.authenticateToken.bind(this._securityMiddleware),
       this._securityMiddleware
         .checkRole([UserRoles.ENCARGADO])
         .bind(this._securityMiddleware), */
@@ -31,7 +31,7 @@ export default class WModelController implements ExpressController {
     );
     this._router.get(
       "/:id",
-    /*   this._securityMiddleware.authenticateToken.bind(this._securityMiddleware),
+      /*   this._securityMiddleware.authenticateToken.bind(this._securityMiddleware),
       this._securityMiddleware
         .checkRole([UserRoles.CLIENTE])
         .bind(this._securityMiddleware), */
@@ -43,7 +43,6 @@ export default class WModelController implements ExpressController {
   private async findAll(req: Request, res: Response, next: NextFunction) {
     try {
       const modelFilters: ModelFilters = req.query;
-      console.log(modelFilters);
       const models = await this._modelService.findAll(modelFilters);
       res.status(HttpCode.HTTP_OK).json(models);
     } catch (err) {
@@ -55,8 +54,9 @@ export default class WModelController implements ExpressController {
   private async findById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
+      const filters = req.params as ModelFilters;
       console.log(id);
-      const model = await this._modelService.findById(id);
+      const model = await this._modelService.findById(id, filters);
       res.status(HttpCode.HTTP_OK).json(model);
     } catch (err) {
       const error: Error = err as Error;

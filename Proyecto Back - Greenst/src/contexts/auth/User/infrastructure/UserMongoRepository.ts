@@ -13,7 +13,6 @@ class UserMongoRepository implements UserRepository {
         { $set: { ...user, _id: undefined } },
         { upsert: true }
       );
-      console.log(xd);
       return;
     }
   }

@@ -1,0 +1,11 @@
+{
+    "_id":"lkabfalkflsakjf",
+    "cityName":"Madrid",
+    "offices":[
+        {
+            "_id":"lksdasldhlak",
+            "coordinate":[0,0],
+            "locationName":"Puerta de Toledo"
+        }
+    ]
+}

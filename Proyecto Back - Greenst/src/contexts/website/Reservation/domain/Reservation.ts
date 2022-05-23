@@ -6,7 +6,7 @@ export default interface Reservation {
   model_id: string,
   customer_id: string,
   departure_office_id: string,
-  arrival_office_id: string,
+  arrival_office_id?: string|null,
   reservationTimestamp?: Date,
   departureTimestamp: Date|null,
   arrivalTimestamp: Date|null,

@@ -7,5 +7,5 @@ import ReservationFilters from "./ReservationFilters";
 export default interface ReservationRepository{
     save(reservation:Reservation):Promise<void>
     findAll(filter:ReservationFilters,pagination:Pagination):Promise<BasicPagedReservationProjection|null>
-    findById(id:string):Promise<DetailedReservationProjection|null>
+    findById(id:string,customer_id:string):Promise<DetailedReservationProjection|null>
 }

@@ -24,7 +24,6 @@ export default class WCustomerMongoRepository implements CustomerRepository {
       email: customer.email,
       enabled: customer.enabled,
     };
-    console.log(newCustomer);
     if (!customer._id) {
       const user = await UserModel.findOne({ email: newUser.email });
       if (user) throw new Error("User already exists");
@@ -60,7 +59,6 @@ export default class WCustomerMongoRepository implements CustomerRepository {
 
   async findById(id: string): Promise<DetailedCustomerProjection | null> {
     const rawCustomer = await CustomerModel.findOne({ user: id });
-    console.log(rawCustomer);
     if (!rawCustomer) throw new Error("Customer not found!");
     const reservations = await ReservationModel.find({
       customer: rawCustomer._id,

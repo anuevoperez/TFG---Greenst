@@ -56,7 +56,6 @@ export default class WCustomerController implements ExpressController {
       ...req.body,
       dateOfBirth:new Date(req.body.dateOfBirth),
     } as Customer;
-    console.log(customer);
     try {
       await this._customerService.insertCustomer({
         ...customer,

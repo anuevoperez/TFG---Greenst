@@ -1,0 +1,32 @@
+{
+    "vehicle":{
+        "_id":"",
+        "model":""
+    },
+    "customer":{
+        "_id":"",
+        "dni":"",
+        "fullName":""
+    },
+    "departure_office":{
+        "_id":"",
+        "locationName":"",
+        "coordinate":[1,1]
+    },
+    "arrival_office":{
+        "_id":"",
+        "locationName":"",
+        "coordinate":[1,1]
+    },
+    "reservationTimestamp":"1900-01-01 00:00:00",
+
+    "departureTimestamp":"1900-01-01 00:00:00",
+    
+    "arrivalTimestamp":"1900-01-01 00:00:00",
+
+    "amount":0,
+
+    "payment_method":"Paypal",
+
+    "reservationStatus":"Confirmed|Cancelled|Completed"
+}

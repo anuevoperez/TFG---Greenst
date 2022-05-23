@@ -4,5 +4,5 @@ import DetailedModelProjection from "./projections/DetailedModelProjection";
 
 export default interface ModelRepository{
     findAll(modelFilters:ModelFilters):Promise<BasicModelProjection[]|null>;
-    findById(id:string):Promise<DetailedModelProjection|null>;
+    findById(id:string,filters:ModelFilters):Promise<DetailedModelProjection|null>;
 }

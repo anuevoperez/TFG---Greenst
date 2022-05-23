@@ -64,11 +64,17 @@ export default class WReservationController implements ExpressController {
   ) {
     try {
       const reservation = req.body as Reservation;
+      const customer_id= res.locals.tokenPayload.id;
+      console.log(reservation);
       await this._reservationService.insertReservation({
         ...reservation,
         _id: undefined,
+        customer_id,
       });
-      res.status(HttpCode.HTTP_CREATED).end();
+      
+      res.status(HttpCode.HTTP_CREATED).json({
+        message:"OK"
+      });
     } catch (err) {
       const error: Error = err as Error;
       const httpError = new HttpError(HttpCode.HTTP_BAD_REQUEST, error.message);
@@ -83,11 +89,16 @@ export default class WReservationController implements ExpressController {
     try {
       const { id } = req.params;
       const reservation = req.body as Reservation;
+      const customer_id= res.locals.tokenPayload.id;
+
       await this._reservationService.updateReservation({
         ...reservation,
         _id: id,
+        customer_id,
       });
-      res.status(HttpCode.HTTP_CREATED).end();
+      res.status(HttpCode.HTTP_CREATED).json({
+        message:"OK"
+      });
     } catch (err) {
       const error: Error = err as Error;
       const httpError = new HttpError(HttpCode.HTTP_BAD_REQUEST, error.message);
@@ -116,7 +127,9 @@ export default class WReservationController implements ExpressController {
   private async findById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const reservation = await this._reservationService.findById(id);
+      const customer_id= res.locals.tokenPayload.id;
+      const reservation = await this._reservationService.findById(id,customer_id);
+      
       res.status(HttpCode.HTTP_OK).json(reservation);
     } catch (err) {
       const error: Error = err as Error;

@@ -18,7 +18,7 @@ export default class WReservationService{
     async findAll(filters:ReservationFilters,pagination:Pagination){
         return await this._reservationRepository.findAll(filters,pagination);
     }
-    async findById(id:string){
-        return await this._reservationRepository.findById(id);
+    async findById(id:string,customer_id:string){
+        return await this._reservationRepository.findById(id,customer_id);
     }
 }

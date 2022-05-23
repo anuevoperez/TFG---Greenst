@@ -27,25 +27,23 @@ export default class WModelMongoRepository implements ModelRepository {
       query.modelName = { $regex: modelFilters.modelName, $options: "i" };
     }
     query.status = VehicleStatus.AVAILABLE;
-    console.log(query);
     const models = await VehicleModel.aggregate([
       {
         $match: query,
       },
       {
-        $group: { _id: "$v_model", count: { $count: {} } },
+        $group: { _id: {office_id:"$office",v_model:"$v_model"}, count: { $count: {} } },
       },
       {
         $lookup: {
           from: "models",
-          localField: "_id",
+          localField: "_id.v_model",
           foreignField: "_id",
           as: "modelInfo",
         },
       },
       {
         $project: {
-          _id: 0,
           count: 1,
           modelInfo: { $arrayElemAt: ["$modelInfo", 0] },
         },
@@ -60,16 +58,17 @@ export default class WModelMongoRepository implements ModelRepository {
       },
       {
         $project: {
+          _id:1,
           count: 1,
           modelInfo: 1,
           brandInfo: { $arrayElemAt: ["$brand", 0] },
         },
       },
     ]).exec();
-    console.log(models);
     //const models = await ModelModel.find(query);
     const result: BasicModelProjection[] = models.map((model) => ({
       _id: model.modelInfo._id,
+      office_id: model._id.office_id,
       img: model.modelInfo.img,
       modelName: model.modelInfo.modelName,
       brandName: model.brandInfo.brandName,
@@ -77,10 +76,24 @@ export default class WModelMongoRepository implements ModelRepository {
     }));
     return result;
   }
-  async findById(id: string): Promise<DetailedModelProjection | null> {
+  async findById(
+    id: string,
+    modelFilters: ModelFilters
+  ): Promise<DetailedModelProjection | null> {
+    const query: any = {};
+    if (modelFilters.city_id) {
+      query.city = new mongoose.Types.ObjectId(modelFilters.city_id);
+    }
+    
+    if (modelFilters.office_id) {
+      query.office = new mongoose.Types.ObjectId(modelFilters.office_id);
+    }
+    query.status = VehicleStatus.AVAILABLE;
+
+   
     const models = await VehicleModel.aggregate([
       {
-        $match: { v_model: new mongoose.Types.ObjectId(id) },
+        $match: { v_model: new mongoose.Types.ObjectId(id) , ...query},
       },
       {
         $group: { _id: "$v_model", count: { $count: {} } },
@@ -116,8 +129,7 @@ export default class WModelMongoRepository implements ModelRepository {
         },
       },
     ]).exec();
-    console.log(id);
-    console.log(models);
+
     const model = models[0];
     if (!model) throw new Error("Not found");
     const modelInfo: any = model.modelInfo;

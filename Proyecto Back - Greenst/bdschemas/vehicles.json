@@ -1,0 +1,9 @@
+{
+    "vehicle_id":"",
+    "vehicle_type":"Car",
+    "brand":"KIA",
+    "model":"EV6",
+    "status":"Available|Not Available|Reserved|",
+    "registrationDate":"2021-01-28",
+    "lastRevision":"2022-01-29"
+}

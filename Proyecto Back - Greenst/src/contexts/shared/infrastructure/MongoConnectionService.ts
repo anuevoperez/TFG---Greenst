@@ -10,7 +10,7 @@ class MongoConnection implements Connection{
         this.db_path=db_path;
     }
     async connect(): Promise<void> {
-        await mongoose.connect(`mongodb+srv://${this.db_user}:${this.db_password}${this.db_path}`);   
+        await mongoose.connect(`mongodb://${this.db_user}:${this.db_password}${this.db_path}`);   
         console.log("Connection sucessful!");
     }
 }

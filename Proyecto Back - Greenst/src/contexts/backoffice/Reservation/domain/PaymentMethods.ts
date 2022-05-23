@@ -1,4 +1,5 @@
 export enum PaymentMethods{
     PAYPAL="paypal",
-    CARD="card"
+    CARD="card",
+    NONE="none"
 }

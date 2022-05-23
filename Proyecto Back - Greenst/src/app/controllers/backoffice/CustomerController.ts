@@ -66,7 +66,6 @@ export default class CustomerController implements ExpressController {
       ...req.body,
       dateOfBirth: new Date(req.body.dateOfBirth),
     } as Customer;
-    console.log(customer);
     try {
       await this._customerService.insertCustomer(customer);
       res.status(HttpCode.HTTP_OK).json({

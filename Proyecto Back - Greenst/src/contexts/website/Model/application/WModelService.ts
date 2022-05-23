@@ -7,8 +7,8 @@ export default class WModelService {
   constructor(modelRepository: ModelRepository) {
     this._modelRepository = modelRepository;
   }
-  async findById(id: string) {
-    return await this._modelRepository.findById(id);
+  async findById(id: string,filters:ModelFilters) {
+    return await this._modelRepository.findById(id,filters);
   }
   async findAll(modelFilters: ModelFilters) {
     return await this._modelRepository.findAll(modelFilters);

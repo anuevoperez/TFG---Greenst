@@ -9,6 +9,7 @@ import Reservation from "../domain/Reservation";
 import ReservationFilters from "../domain/ReservationFilters";
 import ReservationRepository from "../domain/ReservationRepository";
 import { ReservationModel } from "./ReservationModel";
+import mongoose from "mongoose";
 
 export default class WReservationMongoRepository
   implements ReservationRepository
@@ -21,7 +22,9 @@ export default class WReservationMongoRepository
 
     if (!vehicle) throw new Error("Vehicle not found");
 
-    const customer = await CustomerModel.findOne({user:reservation.customer_id});
+    const customer = await CustomerModel.findOne({
+      user: reservation.customer_id,
+    });
 
     if (!customer) throw new Error("Customer not found");
 
@@ -29,13 +32,16 @@ export default class WReservationMongoRepository
       reservation.departure_office_id
     );
 
-    if (!departure_office) throw new Error("Departure Office not found");
+    if (!departure_office && reservation.departure_office_id)
+      throw new Error("Departure Office not found");
 
     const arrival_office = await OfficeModel.findById(
       reservation.arrival_office_id
     );
 
-    if (!arrival_office) throw new Error("Arrival Office not found");
+    if (!arrival_office && reservation.arrival_office_id) {
+      throw new Error("Arrival Office not found");
+    }
 
     const newReservation = {
       vehicle: vehicle._id,
@@ -48,12 +54,13 @@ export default class WReservationMongoRepository
       customer_name: customer.name,
       customer_lastName: customer.lastName,
       customer_dni: customer.dni,
-      departure_office: departure_office._id,
-      departure_office_locationName: departure_office.locationName,
-      departure_office_location: departure_office.location,
-      arrival_office: arrival_office._id,
-      arrival_office_locationName: arrival_office.locationName,
-      arrival_office_location: arrival_office.location,
+      departure_office: departure_office?._id || undefined,
+      departure_office_locationName:
+        departure_office?.locationName || undefined,
+      departure_office_location: departure_office?.location || undefined,
+      arrival_office: arrival_office?._id || undefined,
+      arrival_office_locationName: arrival_office?.locationName || undefined,
+      arrival_office_location: arrival_office?.location || undefined,
       reservationTimestamp: reservation.reservationTimestamp,
       departureTimestamp: reservation.departureTimestamp,
       arrivalTimestamp: reservation.arrivalTimestamp,
@@ -78,13 +85,17 @@ export default class WReservationMongoRepository
     const query: any = {};
 
     if (filter.vehicle_brand_id) {
-      query.vehicle_brand = filter.vehicle_brand_id;
+      query.vehicle_brand = new mongoose.Types.ObjectId(
+        filter.vehicle_brand_id
+      );
     }
     if (filter.vehicle_model) {
       query.vehicle_modelName = { $regex: filter.vehicle_model, $options: "i" };
     }
     if (filter.departure_office_id) {
-      query.departure_office = filter.departure_office_id;
+      query.departure_office = new mongoose.Types.ObjectId(
+        filter.departure_office_id
+      );
     }
 
     if (filter.status) {
@@ -108,9 +119,9 @@ export default class WReservationMongoRepository
         $lte: filter.max_departure_timestamp,
       };
     }
-    const customer = await CustomerModel.findOne({user:filter.user_id});
+    const customer = await CustomerModel.findOne({ user: filter.user_id });
     if (!customer) throw new Error("Customer not found");
-    query.customer= customer._id;
+    query.customer = new mongoose.Types.ObjectId(customer._id);
 
     const populate: any = [];
     const projection: any = {
@@ -159,17 +170,25 @@ export default class WReservationMongoRepository
       docs: reservations,
     };
   }
-  async findById(id: string): Promise<DetailedReservationProjection | null> {
-    const rawReservation = await ReservationModel.findById(id);
+  async findById(
+    id: string,
+    customer_id: string
+  ): Promise<DetailedReservationProjection | null> {
+    const customer = await CustomerModel.findOne({ user: customer_id });
+
+    if (!customer) throw new Error("Customer not found");
+
+    const rawReservation = await ReservationModel.findOne({
+      _id: id,
+      customer_id,
+    });
+
     if (!rawReservation) throw new Error("Reservation not found!");
 
     const result: DetailedReservationProjection = {
       vehicle_brand: rawReservation.vehicle_brandName,
       vehicle_model: rawReservation.vehicle_modelName,
       vehicle_plate: rawReservation.vehicle_plate,
-      customer_name: rawReservation.customer_name,
-      customer_lastName: rawReservation.customer_lastName,
-      customer_dni: rawReservation.customer_dni,
 
       departure_office_locationName:
         rawReservation.departure_office_locationName,

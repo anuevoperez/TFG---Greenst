@@ -1,0 +1,26 @@
+{
+    "vehicle":{
+        "_id":"",
+        "vehicle_id":"",
+        "model":""
+    },
+    "departure_office":{
+        "_id":"",
+        "locationName":"",
+        "coordinate":[1,1]
+    },
+    "arrival_office":{
+        "_id":"",
+        "locationName":"",
+        "coordinate":[1,1]
+    },
+    "departureTimestamp":"1900-01-01 00:00:00",
+    
+    "arrivalTimestamp":"1900-01-01 00:00:00",
+
+    "driver":{
+        "_id":"",
+        "employee_id":"",
+        "fullName":""
+    }
+}

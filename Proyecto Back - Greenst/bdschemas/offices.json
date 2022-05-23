@@ -1,0 +1,10 @@
+ {
+     "_id":"asdashjasDHasjDh",
+     "locationName":"Puerta de Toledo",
+     "PostalCode":"28005",
+     "fullLocation":"Ronda de Segovia 95",
+     "telefono":"+34916123666",
+     "vehicles": ["1","2","3"],
+     "employees":["1","2","3"],
+     "coordinate":[1,1]
+ }

@@ -50,11 +50,11 @@ export default class ReservationSchema {
   @prop({ required: true })
   public departure_office_location!: GeoJSONSchema;
 
-  @prop({ required: true, ref: () => OfficeSchema })
+  @prop({ ref: () => OfficeSchema })
   public arrival_office: Ref<OfficeSchema>;
-  @prop({ required: true })
+  @prop()
   public arrival_office_locationName!: string;
-  @prop({ required: true })
+  @prop()
   public arrival_office_location!: GeoJSONSchema;
 
   @prop({ required: true })
